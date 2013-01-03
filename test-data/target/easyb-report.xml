@@ -1,0 +1,14 @@
+<easyb time='Thu Jan 03 22:04:39 CET 2013' totalbehaviors='1' totalfailedbehaviors='0' totalpendingbehaviors='0' executionTime='888'>
+  <stories scenarios='1' failedscenarios='0' pendingscenarios='0' executionTime='888'>
+    <story name='main' scenarios='1' failedscenarios='0' pendingscenarios='0' executionTime='888'>
+      <execute name='main' scenarios='1' failedscenarios='0' pendingscenarios='0' executionTime='567'>
+        <scenario name='ttt' result='success' executionTime='124'>
+          <given name='a factory' />
+          <then name='it has a factory name' result='success' />
+          <then name='it has a build class' result='success' />
+        </scenario>
+      </execute>
+    </story>
+  </stories>
+  <specifications specifications='0' failedspecifications='0' pendingspecifications='0' executionTime='0' />
+</easyb>

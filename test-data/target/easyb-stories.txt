@@ -1,0 +1,9 @@
+1 scenario executed successfully.
+
+  Story: main
+
+
+    scenario ttt
+      given a factory
+      then it has a factory name
+      then it has a build class
