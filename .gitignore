@@ -1,6 +1,7 @@
+# eclipse
+.classpath
+.project
+.settings
 
-test-data/.classpath
-
-test-data/.project
-
-test-data/.settings/org.eclipse.jdt.core.prefs
+# maven
+target/
