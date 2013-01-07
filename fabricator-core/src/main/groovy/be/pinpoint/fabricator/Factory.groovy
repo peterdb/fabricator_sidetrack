@@ -2,6 +2,7 @@ package be.pinpoint.fabricator
 
 import be.pinpoint.fabricator.properties.Association
 import be.pinpoint.fabricator.properties.Dynamic
+import be.pinpoint.fabricator.properties.PropertyCreator
 import be.pinpoint.fabricator.properties.Static
 
 
@@ -12,6 +13,8 @@ class Factory {
 	final Factory parent
 	final Map<String, Property> properties = [:]
 
+	final PropertyCreator propertyCreator = new PropertyCreator()
+	
 	public Factory(String name, Class klass, Factory parent = null) {
 		this.name = name
 		this.klass = klass
@@ -29,7 +32,7 @@ class Factory {
 			closure.delegate = result
 			closure.resolveStrategy = Closure.DELEGATE_FIRST
 
-			result.setProperty(name, closure.call())
+			result[name] = closure.call()
 		}
 
 		return result;
@@ -43,7 +46,7 @@ class Factory {
 		collectProperties(props)
 		
 		props.putAll(overrides.collectEntries{ name, override ->
-			[name, createProperty(name, override)]
+			[name, propertyCreator.create(name, override)]
 		})
 		
 		return props
@@ -58,9 +61,7 @@ class Factory {
 	}
 	
 	def propertyMissing(String name) {
-		// this is a property -> check for association
-
-		Property property = createProperty(name, [])
+		Property property = propertyCreator.create(name)
 		
 		properties[name] = property
 		
@@ -68,64 +69,10 @@ class Factory {
 	}
 
 	def methodMissing(String name, args) {
-		Property property = createProperty(name, args)
+		Property property = propertyCreator.create(name, args)
 
 		properties[name] = property;
 		
 		return property
-	}
-
-	private Property createProperty(String name, Object[] params) {
-		// name = attribute name
-		// args: closure -> dynamic, value -> static, empty -> use name as param to find a sequence
-
-		if(params.size() >= 1) {
-			// check for association
-			def param = params[0]
-			if(param instanceof LinkedHashMap) {
-				// association with count?
-				if(param.size() == 1 && param.containsKey("count")) {
-					Factory factory = Fabricator.factoryByName(name)
-				
-					if(factory) {
-						// check if second param is a closure
-						if(params.size() > 1 && params[1] instanceof Closure) {
-							return new Association(name, factory, param["count"], params[1])
-						} else {
-							return new Association(name, factory, param["count"], null)
-						}						
-					}
-				}
-			}
-		}
-		
-		if(params.size() == 1) {
-			def param = params[0]
-			if(param instanceof Closure) {
-				return new Dynamic(name, param)
-			}
-	
-			if(param instanceof Sequence) {
-				return new Dynamic(name, { Fabricator.generate(param.name) })
-			}
-			
-			if(param == null) {
-				// association, use the name as lookup
-				Factory factory = Fabricator.factoryByName(name)
-				
-				if(factory) {
-					return new Association(name, factory)
-				}else {
-					// try with a sequence
-					Sequence sequence = Fabricator.sequenceByName(name)
-					if(sequence) {
-						return new Dynamic(name, { Fabricator.generate(name) })
-					}
-				}
-				// TODO handle no factory and no sequence found
-			}
-	
-			return new Static(name, param)
-		}
 	}
 }

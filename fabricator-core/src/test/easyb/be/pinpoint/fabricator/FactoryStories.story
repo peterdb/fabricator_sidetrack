@@ -21,20 +21,21 @@ scenario "create a factory", {
 }
 
 scenario "sequence", {
-	given "a factory is created", {
+	given "an email sequence definition", {
 		Fabricator.sequence("email", { n -> "person$n@gmail.com" })
 		
 		Fabricator.define(User) {
 			first "John"
 			last "Doe"
-			email { generate("email") }
+			email { Fabricator.generate("email") }
 		}
-
-		user = Fabricator.fabricate(User, first: "overridden")
 	}
 	
-	then "it should have a name", {
-		user.first.shouldBe "overridden"
+	when " a user is fabricated", {
+		user = Fabricator.fabricate(User)
+	}
+	
+	then "it should have a generated email", {
 		user.email.shouldBe "person0@gmail.com"
 	}
 }

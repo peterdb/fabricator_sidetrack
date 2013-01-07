@@ -1,30 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>be.pinpoint.fabricator</groupId>
 		<artifactId>fabricator</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-
-	<artifactId>fabricator-core</artifactId>
-
-	<name>Fabricator core functionality</name>
+	<artifactId>fabricator-sandbox</artifactId>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-all</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>apache-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>be.pinpoint.fabricator</groupId>
+			<artifactId>fabricator-core</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -85,19 +72,6 @@
 				<version>2.7.0-01</version>
 				<extensions>true</extensions>
 			</plugin>
-			<plugin>
-				<groupId>org.easyb</groupId>
-				<artifactId>maven-easyb-plugin</artifactId>
-				<version>0.9.7-1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
-
 </project>

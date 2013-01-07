@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>be.pinpoint.fabricator</groupId>
+	<artifactId>fabricator</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Fabricator umbrella</name>
+
+	<modules>
+		<module>fabricator-core</module>
+		<module>fabricator-sandbox</module>
+	</modules>
+	
+	<dependencyManagement>
+		<dependencies>
+			<!-- internal dependencies -->
+			<dependency>
+				<groupId>be.pinpoint.fabricator</groupId>
+				<artifactId>fabricator-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>org.codehaus.groovy</groupId>
+				<artifactId>groovy-all</artifactId>
+				<version>1.8.6</version>
+			</dependency>
+			<dependency>
+				<groupId>apache-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.10</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<!-- for easyb -->
+	<repositories>
+		<repository>
+			<id>sonatype-snapshots</id>
+			<url>http://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>sonatype-plugin-snapshots</id>
+			<url>http://oss.sonatype.org/content/repositories/snapshots</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>

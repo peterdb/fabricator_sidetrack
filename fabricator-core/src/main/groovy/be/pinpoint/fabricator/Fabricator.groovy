@@ -2,8 +2,6 @@ package be.pinpoint.fabricator
 
 import org.apache.commons.lang.StringUtils
 
-import be.pinpoint.fabricator.support.User
-
 /**
  * Entry point
  * 
@@ -70,6 +68,14 @@ public class Fabricator {
 
 	public static Factory factoryByName(String name) {
 		return factories[name]
+	}
+	
+	public static Factory factoryByClass(Class klass) {
+		use(StringUtils) {
+			def name = klass.getSimpleName().uncapitalize()
+
+			return factoryByName(name)
+		}
 	}
 
 	public static Object fabricate(Map overrides = [:], String name) {
