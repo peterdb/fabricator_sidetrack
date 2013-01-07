@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>be.pinpoint.fabricator</groupId>
-	<artifactId>fabricator</artifactId>
+	<artifactId>fabricator-core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>Fabricator creates objects</name>
+	<name>Fabricator core functionality</name>
 
 	<dependencies>
 		<dependency>
