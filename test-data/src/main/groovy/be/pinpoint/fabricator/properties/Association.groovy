@@ -4,7 +4,7 @@ import be.pinpoint.fabricator.Property
 import be.pinpoint.fabricator.Factory
 
 /**
- * dynamic property 
+ * association property 
  * 
  * @author peter
  */
