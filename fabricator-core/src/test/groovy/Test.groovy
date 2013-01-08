@@ -1,9 +1,9 @@
 import org.junit.Ignore;
 
-import be.pinpoint.fabricator.Fabricator
-import be.pinpoint.fabricator.support.Kitten
-import be.pinpoint.fabricator.support.Post
-import be.pinpoint.fabricator.support.User
+import fabricator.Fabricator
+import fabricator.support.Kitten
+import fabricator.support.Post
+import fabricator.support.User
 
 
 @Ignore

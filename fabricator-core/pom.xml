@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>be.pinpoint.fabricator</groupId>
+		<groupId>fabricator</groupId>
 		<artifactId>fabricator</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
