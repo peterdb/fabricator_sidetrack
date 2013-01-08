@@ -1,6 +1,7 @@
 package fabricator
 
-import groovy.lang.Closure;
+import fabricator.support.Named;
+
 
 public abstract class Property {
 	final String name
@@ -9,6 +10,8 @@ public abstract class Property {
 		assert name, "name cannot be empty or null"
 		
 		this.name = name
+		
+		
 	}
 	
 	/**

@@ -4,19 +4,19 @@ import fabricator.properties.Association
 import fabricator.properties.Dynamic
 import fabricator.properties.PropertyCreator
 import fabricator.properties.Static
+import fabricator.support.Named;
 
+class Factory extends Named {
 
-class Factory {
-
-	final String name
 	final Class klass
 	final Factory parent
 	final Map<String, Property> properties = [:]
 
 	final PropertyCreator propertyCreator = new PropertyCreator()
 	
-	public Factory(String name, Class klass, Factory parent = null) {
-		this.name = name
+	public Factory(String name, List aliases = [], Class klass, Factory parent = null) {
+		super(name, aliases)
+		
 		this.klass = klass
 		this.parent = parent;
 	}

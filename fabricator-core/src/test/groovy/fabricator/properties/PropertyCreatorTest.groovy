@@ -3,13 +3,9 @@ package fabricator.properties;
 import org.junit.Before
 import org.junit.Test
 
-import fabricator.properties.Association;
-import fabricator.properties.PropertyCreator;
-import fabricator.properties.SequenceProperty;
-
 import fabricator.Fabricator
 import fabricator.support.Kitten
-import fabricator.support.Post;
+import fabricator.support.Post
 
 class PropertyCreatorTest {
 
