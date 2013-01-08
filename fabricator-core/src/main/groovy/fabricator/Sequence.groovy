@@ -1,18 +1,19 @@
 package fabricator
 
-public class Sequence {
+import fabricator.support.Named;
 
-	final String name
+public class Sequence extends Named {
+
 	final Closure closure
 
 	Object currentValue
 	
-	public Sequence(String name, Object value = 0, Closure closure = null) {
-		assert name, "name cannot be null or empty"
+	public Sequence(String name, List aliases, Object value = 0, Closure closure = null) {
+		super(name, aliases)
+		
 		assert value != null, "value cannot be null"
 		assert value.respondsTo("next"), "values doesn't respond to next"
 		
-		this.name = name
 		currentValue = value
 		this.closure = closure
 	}

@@ -2,6 +2,8 @@ package fabricator
 
 import org.apache.commons.lang.StringUtils
 
+import fabricator.support.NamedRegistry
+
 /**
  * Entry point
  * 
@@ -9,21 +11,30 @@ import org.apache.commons.lang.StringUtils
  */
 public class Fabricator {
 
-	final static Map<String, Sequence> sequences = new HashMap<String, Sequence>()
-	final static Map<String, Factory> factories = new HashMap<String, Factory>()
+	final static NamedRegistry<Sequence> sequences = new NamedRegistry<Sequence>()
+	final static NamedRegistry<Factory> factories = new NamedRegistry<Factory>()
 
 	// TODO try to convert the name to a valid class name
 	// TODO factory aliases
 	// TODO hierarchies
-	public static Factory define(String name, Class klass, Closure closure = null) {
-		return define(name, klass, null, closure)
+	public static Factory define(Map options = [:], String name, Class klass, Closure closure) {
+		return define(options, name, klass, null, closure)
 	}
-	
-	public static Factory define(String name, Class klass, Factory parent, Closure closure = null) {
+
+	public static Factory define(Map options = [:], String name, Class klass) {
+		return define(options, name, klass, null, null)
+	}
+
+	public static Factory define(Map options = [:], String name, Class klass, Factory parent, Closure closure) {
 		assert name, "name cannot be null or empty"
 		assert klass, "klass cannot be null"
 
-		Factory factory = new Factory(name, klass, parent)
+		def aliases = options["aliases"]
+		if(aliases == null) {
+			aliases = []
+		}
+
+		Factory factory = new Factory(name, aliases, klass, parent)
 		if(closure) {
 			closure.delegate = factory
 			closure(factory)
@@ -32,15 +43,19 @@ public class Fabricator {
 		return registerFactory(factory)
 	}
 
-	public static Factory define(Class klass, Closure closure = null) {
+	public static Factory define(Map options = [:], Class klass) {
+		return define(options, klass, null)
+	}
+
+	public static Factory define(Map options = [:], Class klass, Closure closure) {
 		use(StringUtils) {
 			def name = klass.getSimpleName().uncapitalize()
 
-			return define(name, klass, closure)
+			return define(options, name, klass, closure)
 		}
 	}
 
-	public static Factory define(Map options, String name, Closure closure = null) {
+	public static Factory define(Map options = [:], String name, Closure closure = null) {
 		def from = options["from"]
 		def parent
 		if(from instanceof String) {
@@ -54,14 +69,14 @@ public class Fabricator {
 		}
 
 		assert parent, "no parent factory found for " + from
-		
+
 		return define(name, parent.klass, parent, closure)
 	}
 
 	public static Factory registerFactory(Factory factory) {
 		assert factory, "factory cannot be null"
 
-		factories[factory.name] = factory
+		factories.register(factory)
 
 		return factory
 	}
@@ -69,7 +84,7 @@ public class Fabricator {
 	public static Factory factoryByName(String name) {
 		return factories[name]
 	}
-	
+
 	public static Factory factoryByClass(Class klass) {
 		use(StringUtils) {
 			def name = klass.getSimpleName().uncapitalize()
@@ -91,18 +106,30 @@ public class Fabricator {
 	}
 
 	public static Sequence sequence(String name, Closure closure = null) {
-		return sequence(name, 0, closure)
+		return sequence([:], name, 0, closure)
+	}
+
+	public static Sequence sequence(Map options, String name, Closure closure = null) {
+		return sequence(options, name, 0, closure)
 	}
 
 	public static Sequence sequence(String name, Object value, Closure closure = null) {
-		return registerSequence(new Sequence(name, value, closure))
+		return sequence([:], name, value, closure)
+	}
+
+	public static Sequence sequence(Map options, String name, Object value, Closure closure = null) {
+		def aliases = options["aliases"]
+		if(aliases == null) {
+			aliases = []
+		}
+
+		return registerSequence(new Sequence(name, aliases, value, closure))
 	}
 
 	public static Sequence registerSequence(Sequence sequence) {
 		assert sequence, "sequence cannot be null"
 
-		// TODO sequence aliases
-		sequences[sequence.name] = sequence
+		sequences.register(sequence)
 
 		return sequence
 	}
