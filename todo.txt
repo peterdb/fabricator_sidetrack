@@ -1,0 +1,12 @@
+- transient (ignored) properties: can be referenced by other dynamic properties, but will not be set on result + will not be returned by propertiesFor
+	-> example:
+			ignore {
+				someProperty <property declaration>
+				...
+			}
+- propertiesFor method -> return all properties for a given class
+- extract dsl from classes?
+v factory inheritance
+- aliases for factories, sequences
+- associations
+- 
