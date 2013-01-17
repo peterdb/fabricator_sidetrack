@@ -1,4 +1,4 @@
-package fabricator.support
+package fabricator.stories.support
 
 class CustomIncrementable {
 

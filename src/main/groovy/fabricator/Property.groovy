@@ -1,17 +1,18 @@
 package fabricator
 
 import fabricator.support.Named;
+import groovy.transform.ToString;
 
-
+@ToString(includeNames=true)
 public abstract class Property {
 	final String name
-	final boolean ignored
+	final boolean ignore
 	
-	public Property(String name, boolean ignored) {
+	public Property(String name, boolean ignore) {
 		assert name, "name cannot be empty or null"
 		
 		this.name = name
-		this.ignored = ignored
+		this.ignore = ignore
 	}
 	
 	/**

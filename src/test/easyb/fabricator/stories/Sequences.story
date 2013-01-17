@@ -1,12 +1,16 @@
-package fabricator
+package fabricator.stories
 
-import fabricator.support.CustomIncrementable
+import fabricator.Fabricator
+import fabricator.stories.support.CustomIncrementable
+import fabricator.support.User
 
 description "sequence specifications"
 
 scenario "with no arguments", {
 	given "a sequence with no arguments", {
-		sequence = Fabricator.sequence()
+		Fabricator.define { 
+			sequence = sequence()
+		}
 	}
 	then "it creates a default sequence", {
 		sequence.name.shouldBe("default")
@@ -14,7 +18,11 @@ scenario "with no arguments", {
 }
 
 scenario "with only a name argument", {
-	given "a sequence with a name", { Fabricator.sequence("seq") }
+	given "a sequence with a name", { 
+		Fabricator.define {
+			sequence("seq") 
+		}
+	}
 
 	then "it starts with 0", {
 		Fabricator.generate("seq").shouldBe 0
@@ -30,7 +38,9 @@ scenario "with only a name argument", {
 
 scenario "with a name and starting number", {
 	given "a sequence with a name and starting number", {
-		Fabricator.sequence("higher", 69)
+		Fabricator.define {
+			sequence("higher", 69)
+		}
 	}
 
 	then "it starts with the number provided", {
@@ -47,8 +57,10 @@ scenario "with a name and starting number", {
 
 scenario "two sequences increment separately", {
 	given "two sequences", {
-		Fabricator.sequence("incr1")
-		Fabricator.sequence("incr2")
+		Fabricator.define {
+			sequence("incr1")
+			sequence("incr2")
+		}
 	}
 
 	then "they start with 0", {
@@ -70,7 +82,9 @@ scenario "two sequences increment separately", {
 
 scenario "with a block", {
 	given "a sequence with a closure", {
-		Fabricator.sequence("email", { n -> "user$n@example.com" })
+		Fabricator.define {
+			sequence("email", { n -> "user$n@example.com" })
+		}
 	}
 	
 	then "it passes the number to the closure and returns the value", {
@@ -85,7 +99,9 @@ scenario "with a block", {
 
 scenario "with a char value", {
 	given "a sequence with a char starting value", {
-		Fabricator.sequence("char", 'd')
+		Fabricator.define {
+			sequence("char", 'd')
+		}
 	}
 	
 	then "it starts with the char provided", {
@@ -102,7 +118,9 @@ scenario "with a char value", {
 
 scenario "with a custom incrementable capable value", {
 	given "a sequence with a custom incrementable cabable starting value", {
-		Fabricator.sequence("custom", new CustomIncrementable(99))
+		Fabricator.define {
+			sequence("custom", new CustomIncrementable(99))
+		}
 	}
 	
 	then "it starts with the char provided", {
@@ -114,42 +132,6 @@ scenario "with a custom incrementable capable value", {
 		Fabricator.generate("custom").value.shouldBe 101
 		Fabricator.generate("custom").value.shouldBe 102
 		Fabricator.generate("custom").value.shouldBe 103
-	}
-}
-
-scenario "reset a sequence", {
-	given "a sequence", {
-		Fabricator.sequence("seq")
-
-		Fabricator.generate("seq")
-		Fabricator.generate("seq")
-		Fabricator.generate("seq")
-		
-		assert Fabricator.generate("seq") == 3
-	}
-	when "it is reset", {
-		Fabricator.reset("seq")
-	}
-	then "it should restart at 0", {
-		Fabricator.generate("seq").shouldBe 0
-	}
-}
-
-scenario "reset a sequence with a starting number", {
-	given "a sequence with a starting number", {
-		Fabricator.sequence("seq", 10)
-
-		Fabricator.generate("seq")
-		Fabricator.generate("seq")
-		Fabricator.generate("seq")
-		
-		assert Fabricator.generate("seq") == 13
-	}
-	when "it is reset", {
-		Fabricator.reset("seq")
-	}
-	then "it should restart at the starting number", {
-		Fabricator.generate("seq").shouldBe 10
 	}
 }
 

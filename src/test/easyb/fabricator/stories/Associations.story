@@ -1,4 +1,4 @@
-package fabricator
+package fabricator.stories
 
 import fabricator.Fabricator;
 import fabricator.support.Kitten;
@@ -9,11 +9,11 @@ description "associations"
 scenario "a simple association", {
 	given "an association with no params", {
 		Fabricator.define {
-			Fabricator.factory(Kitten) {
+			factory(Kitten) {
 				name "Garfield"
 			}
 			
-			Fabricator.factory(User) {
+			factory(User) {
 				first "John"
 				last "Doe"
 				kitten
@@ -34,10 +34,10 @@ scenario "a simple association", {
 scenario "an association with overridden property", {
 	given "a user factory with a kitten association", {
 		Fabricator.define {
-			Fabricator.factory(Kitten) {
+			factory(Kitten) {
 				name "Garfield"
 			}
-			Fabricator.factory(User) {
+			factory(User) {
 				first "John"
 				last "Doe"
 				kitten name:"overridden name"

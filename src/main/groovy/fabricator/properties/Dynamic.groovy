@@ -11,8 +11,8 @@ class Dynamic extends Property {
 
 	final Closure closure
 	
-	public Dynamic(String name, boolean ignored, Closure closure) {
-		super(name, ignored)
+	public Dynamic(String name, boolean ignore, Closure closure) {
+		super(name, ignore)
 		
 		this.closure = closure
 	}

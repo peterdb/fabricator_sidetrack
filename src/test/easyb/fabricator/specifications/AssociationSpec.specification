@@ -1,0 +1,31 @@
+package fabricator.specifications
+
+import fabricator.Fabricator
+import fabricator.properties.Association
+import fabricator.support.User
+
+description Association.name
+
+before "create an association", {
+	Fabricator.define {
+		factory(User)
+	}
+	
+	name = "author"
+	factory = Fabricator.factoryByName("user")
+	overrides = [first: "John"]
+
+	subject = new Association(name, false, factory, 1, overrides)	
+}
+
+it "should have a name", {
+	subject.name.shouldBe name
+}
+
+it "builds the association when calling the proc", {
+	value = subject.toClosure().call()
+	
+	assert value != null
+	assert value.getClass() == User
+	assert value.first == "John"
+}
