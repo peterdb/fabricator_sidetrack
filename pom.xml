@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
-			<version>2.0.0</version>
+			<version>2.0.6</version>
 		</dependency>
 		
 		<!-- for testing -->
@@ -22,6 +22,11 @@
 			<artifactId>junit</artifactId>
 			<version>4.10</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.easyb</groupId>
+			<artifactId>easyb-core</artifactId>
+			<version>1.5</version>
 		</dependency>
 	</dependencies>
 

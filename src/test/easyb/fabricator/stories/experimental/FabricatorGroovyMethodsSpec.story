@@ -1,19 +1,22 @@
-package fabricator.experimental
+package fabricator.stories.experimental
 
 import fabricator.Fabricator
-import fabricator.support.User;
+import fabricator.experimental.FabricatorGroovyMethods
+import fabricator.support.User
 
 description "fabricator methods -> Class.fabricate(...)"
 
 before "factory the factories", {
 	given "factories are factoryd", {
-		Fabricator.factory(User, aliases: ["john"]) {
-			first "John"
-			last "Doe"
-			email { "$first.$last@example.com" }
+		Fabricator.define {
+			factory(User, aliases: ["john"]) {
+				first "John"
+				last "Doe"
+				email { "$first.$last@example.com" }
+				
+				factory("jane") { first "Jane" }
+			}
 		}
-		
-		Fabricator.factory("jane", from: "user") { first "Jane" }
 	}
 }
 

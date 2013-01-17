@@ -15,8 +15,8 @@ class Association extends Property {
 	final Closure closure
 	final Map overrides
 
-	public Association(String name, boolean ignored, Factory factory, Integer count, Map overrides = [:]) {
-		super(name, ignored)
+	public Association(String name, boolean ignore, Factory factory, Integer count, Map overrides = [:]) {
+		super(name, ignore)
 
 		assert factory, "factory cannot be null"
 		assert overrides != null, "overrides cannot be null"

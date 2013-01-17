@@ -8,13 +8,13 @@ import groovy.transform.ToString;
  * 
  * @author peter
  */
-@ToString
+@ToString(includeNames=true, includeSuper=true)
 class Static extends Property {
 
 	final Object value
 	
-	public Static(String name, boolean ignored, Object value) {
-		super(name, ignored)
+	public Static(String name, boolean ignore, Object value) {
+		super(name, ignore)
 		
 		this.value = value
 	}

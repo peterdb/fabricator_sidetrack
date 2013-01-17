@@ -1,5 +1,6 @@
-package fabricator
+package fabricator.stories
 
+import fabricator.Fabricator;
 import fabricator.support.User
 
 scenario "define a factory", {
@@ -18,7 +19,10 @@ scenario "define a factory", {
 	}
 
 	then "it registers a factory with the name", {
-		Fabricator.factoryByName("user").shouldBeAFactory
-		Fabricator.factoryByName("admin").shouldBeAFactory
+		Fabricator.configuration.with {
+			factoryByName("user").shouldBeAFactory
+			factoryByName("admin").shouldBeAFactory
+			factoryByName("admin").parent.shouldBe factoryByName("user")
+		}
 	}
 }
