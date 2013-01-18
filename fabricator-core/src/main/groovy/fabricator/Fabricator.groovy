@@ -1,9 +1,7 @@
 package fabricator
 
 import fabricator.configuration.Configuration
-import fabricator.support.DefaultNamingStrategy
-import fabricator.support.NamedRegistry
-import fabricator.support.NamingStrategy
+import fabricator.dsl.DSL
 
 /**
  * Entry point
@@ -11,11 +9,12 @@ import fabricator.support.NamingStrategy
  * @author peter
  */
 public class Fabricator {
-
+	
+	@Delegate
 	static Configuration configuration = new Configuration()
 	
 	public static void define(Closure closure) {
-		configuration.with(closure)
+		DSL.with(closure)
 	}
 	
 	public static Object fabricate(Map overrides = [:], String name) {
@@ -51,5 +50,18 @@ public class Fabricator {
 		 */
 		
 		configuration = new Configuration()
+	}
+	
+	// TODO automate these delegating methods
+	public static void registerFactory(Factory factory) {
+		configuration.registerFactory(factory)
+	}
+	
+	public static Factory factoryByName(String name) {
+		return configuration.factoryByName(name)
+	}
+	
+	public static void registerSequence(Sequence sequence) {
+		configuration.registerSequence(sequence)
 	}
 }

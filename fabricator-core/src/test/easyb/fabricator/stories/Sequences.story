@@ -6,17 +6,6 @@ import fabricator.support.User
 
 description "sequence specifications"
 
-scenario "with no arguments", {
-	given "a sequence with no arguments", {
-		Fabricator.define { 
-			sequence = sequence()
-		}
-	}
-	then "it creates a default sequence", {
-		sequence.name.shouldBe("default")
-	}
-}
-
 scenario "with only a name argument", {
 	given "a sequence with a name", { 
 		Fabricator.define {
@@ -25,21 +14,21 @@ scenario "with only a name argument", {
 	}
 
 	then "it starts with 0", {
-		Fabricator.generate("seq").shouldBe 0
+		Fabricator.generate("seq").shouldBe 1
 	}
 
 	then "it increments by one with each call", {
-		Fabricator.generate("seq").shouldBe 1
 		Fabricator.generate("seq").shouldBe 2
 		Fabricator.generate("seq").shouldBe 3
 		Fabricator.generate("seq").shouldBe 4
+		Fabricator.generate("seq").shouldBe 5
 	}
 }
 
 scenario "with a name and starting number", {
 	given "a sequence with a name and starting number", {
 		Fabricator.define {
-			sequence("higher", 69)
+			sequence("higher", start: 69)
 		}
 	}
 
@@ -64,13 +53,11 @@ scenario "two sequences increment separately", {
 	}
 
 	then "they start with 0", {
-		Fabricator.generate("incr1").shouldBe 0
-		Fabricator.generate("incr2").shouldBe 0
+		Fabricator.generate("incr1").shouldBe 1
+		Fabricator.generate("incr2").shouldBe 1
 	}
 
 	then "they increment separately by one with each call", {
-		Fabricator.generate("incr1").shouldBe 1
-		Fabricator.generate("incr2").shouldBe 1
 		Fabricator.generate("incr1").shouldBe 2
 		Fabricator.generate("incr2").shouldBe 2
 		Fabricator.generate("incr1").shouldBe 3
@@ -88,19 +75,19 @@ scenario "with a block", {
 	}
 	
 	then "it passes the number to the closure and returns the value", {
-		Fabricator.generate("email").shouldBe "user0@example.com"
+		Fabricator.generate("email").shouldBe "user1@example.com"
 	}
 
 	then "it increments by one with each call", {
-		Fabricator.generate("email").shouldBe "user1@example.com"
 		Fabricator.generate("email").shouldBe "user2@example.com"
+		Fabricator.generate("email").shouldBe "user3@example.com"
 	}
 }
 
 scenario "with a char value", {
 	given "a sequence with a char starting value", {
 		Fabricator.define {
-			sequence("char", 'd')
+			sequence("char", start:'d')
 		}
 	}
 	
@@ -119,7 +106,7 @@ scenario "with a char value", {
 scenario "with a custom incrementable capable value", {
 	given "a sequence with a custom incrementable cabable starting value", {
 		Fabricator.define {
-			sequence("custom", new CustomIncrementable(99))
+			sequence("custom", start: new CustomIncrementable(99))
 		}
 	}
 	

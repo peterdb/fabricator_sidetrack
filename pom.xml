@@ -24,6 +24,11 @@
 				<artifactId>fabricator-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>fabricator</groupId>
+				<artifactId>fabricator-data</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 		
 			<!-- 3rd party -->
 			<dependency>

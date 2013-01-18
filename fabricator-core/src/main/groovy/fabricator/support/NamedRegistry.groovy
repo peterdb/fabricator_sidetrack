@@ -16,6 +16,10 @@ class NamedRegistry<T extends Named> {
 			values[name] = named
 		}
 	}
+	
+	boolean isRegistered(String name) {
+		return values.containsKey(name)
+	}
 
 	// enable registry[name] syntax
 	T getAt(String name) {

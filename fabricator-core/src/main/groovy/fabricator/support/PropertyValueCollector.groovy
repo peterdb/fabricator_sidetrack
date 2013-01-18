@@ -20,10 +20,6 @@ class PropertyValueCollector {
 			throw new MissingPropertyException(name, PropertyValueCollector)
 		}
 		
-		if(name == "sequence") {
-			new Exception("qmdklmqskdfjl").printStackTrace()
-		}
-		
 		values[name]
 	}
 }

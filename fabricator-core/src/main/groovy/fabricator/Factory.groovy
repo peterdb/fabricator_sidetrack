@@ -1,31 +1,50 @@
 package fabricator
 
-import fabricator.support.IgnoreBlockHandler
+import fabricator.properties.Dynamic
+import fabricator.properties.Static
 import fabricator.support.Named
-import fabricator.support.PropertyCreator
 import fabricator.support.PropertyValueCollector
-import groovy.util.logging.Log
 
-@Log
-class Factory extends Named {
+class Factory {
 
-	final Class klass
+	final String name
+	final List aliases
+	final Class classToCreate
 	final Factory parent
-	final Map<String, Property> properties = [:]
 
+	@Delegate
+	final Definition definition
+	
 	Closure instantiator
 	
-	final PropertyCreator propertyCreator = new PropertyCreator()
-	
-	public Factory(String name, List aliases = [], Class klass, Factory parent = null) {
-		super(name, aliases)
+	public Factory(String name, Map options = [:]) {
+		this.name = name
+		this.aliases = options["aliases"]
+		this.parent = options["parent"]
+		this.classToCreate = options["class"]
 		
-		this.klass = klass
-		this.parent = parent;
+		definition = new Definition(name)
+	}
+	
+	public Class getClassToCreate() {
+		return classToCreate ? classToCreate : parent.getClassToCreate()
 	}
 	
 	public Object run(Map<String, Object> overrides = [:]) {
-		return runWith(null, overrides)
+		def result = runWith(null, overrides)
+		
+		// first call all default callbacks
+		for (Closure afterCreate : Fabricator.configuration.afterCreateCallbacks) {
+			def tmp = afterCreate.call(result)
+			
+			if(tmp != null) {
+				result = tmp
+			}
+		}
+		
+		// then the factory specific ones
+		
+		return result
 	}
 	
 	public Object runWith(Object target, Map<String, Object> overrides = [:]) {
@@ -33,16 +52,11 @@ class Factory extends Named {
 		
 		def allProperties = getPropertiesToApply(overrides)
 		
-		log.info "properties to apply to $target: $allProperties"
-		
 		allProperties.each { name, property ->
 			Closure closure = property.toClosure()
 
 			// set the delegate to result so dynamic properties can reference properties that already have been set
-			log.info "evaluating property $name: $property"
 			def value = collector.with(closure)
-			
-			log.info "value for property $name: $value"
 			
 			collector[name] = value
 		}
@@ -55,7 +69,7 @@ class Factory extends Named {
 			closure.delegate = collector
 			closure.resolveStrategy = Closure.DELEGATE_FIRST
 			
-			target = closure.call(klass)			
+			target = closure.call(getClassToCreate())			
 		}
 		
 		// apply all non-transient property values in the collector to the target object
@@ -81,11 +95,9 @@ class Factory extends Named {
 		}
 				
 		props.putAll(overrides.collectEntries{ name, override ->
-			println "override: $name, $override"
 			def ignore = props[name] ? props[name].ignore : false
-			println "ignore: $ignore"
-			def overriddenProperty = propertyCreator.create(name, [["ignore": ignore], override])
-			[name, overriddenProperty]
+			
+			[name, override instanceof Closure ? new Dynamic(name, ignore, override) : new Static(name, ignore, override)]
 		})
 		
 		return props
@@ -96,23 +108,7 @@ class Factory extends Named {
 			parent.collectProperties(collected)
 		}
 		
-		collected.putAll(properties)
-	}
-	
-	def propertyMissing(String name) {
-		Property property = propertyCreator.create(name, [])
-		
-		properties[name] = property
-		
-		return property
-	}
-
-	def methodMissing(String name, args) {
-		Property property = propertyCreator.create(name, args)
-
-		properties[name] = property;
-		
-		return property
+		collected.putAll(declarations.toProperties().collectEntries { property -> [(property.name): property]})
 	}
 	
 	def instantiator(Closure instantiator) {
@@ -125,9 +121,4 @@ class Factory extends Named {
 		return Fabricator.configuration.factory(this, args)
 	}
 	
-	// for creating transient properties
-	def ignore(Closure closure) {
-		// route all property definitions through the transient property collector
-		new IgnoreBlockHandler(this).with(closure)
-	}
 }

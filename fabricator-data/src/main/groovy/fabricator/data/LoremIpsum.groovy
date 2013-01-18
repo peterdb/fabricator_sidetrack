@@ -3,9 +3,9 @@ package fabricator.data
 
 class LoremIpsum {
 
-	static final common_p = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+	static final LOREM_IPSUM = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
  
-	static final words = ['exercitationem', 'perferendis', 'perspiciatis', 'laborum', 'eveniet',
+	static final WORDS = ['exercitationem', 'perferendis', 'perspiciatis', 'laborum', 'eveniet',
 	    'sunt', 'iure', 'nam', 'nobis', 'eum', 'cum', 'officiis', 'excepturi',
 	    'odio', 'consectetur', 'quasi', 'aut', 'quisquam', 'vel', 'eligendi',
 	    'itaque', 'non', 'odit', 'tempore', 'quaerat', 'dignissimos',
@@ -35,12 +35,10 @@ class LoremIpsum {
 	    'eos', 'alias', 'dolore', 'tenetur', 'deleniti', 'porro', 'facere',
 	    'maxime', 'corrupti']
  
-	static final common_words
+	static final LOREM_IPSUM_WORDS
  
 	static {
-		common_words = []
-		
-		println common_words
+		LOREM_IPSUM_WORDS = LOREM_IPSUM.toLowerCase().split("\\W+")
 	}
 
    /**
@@ -90,7 +88,7 @@ class LoremIpsum {
 	static paragraphs(int count, boolean isCommon = true) {
 		def paragraphs = (0..<count).collect { n -> 
 			if(isCommon && n == 0) {
-				common_p
+				LOREM_IPSUM
 			} else {
 				paragraph()
 			}
@@ -109,16 +107,16 @@ class LoremIpsum {
 		def result = []
 		
 	    if (isCommon) {
-	        if (count > common_words.size()) {
-				result = common_words + words(count - common_words.size(), false)
+	        if (count > LOREM_IPSUM_WORDS.size()) {
+				result = LOREM_IPSUM_WORDS + words(count - LOREM_IPSUM_WORDS.size(), false)
 	        }
 	        else {
-	            result = common_words[0..count-1];
+	            result = LOREM_IPSUM_WORDS[0..count-1];
 	        }
 	    }
 	    else {
 			Random rand = new Random()
-			result = (0..<count).collect { words[rand.nextInt(words.size())] }
+			result = (0..<count).collect { WORDS[rand.nextInt(WORDS.size())] }
 	    }
 	   
 	    return result.join(' ')

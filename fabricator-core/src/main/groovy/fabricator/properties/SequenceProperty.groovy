@@ -1,18 +1,21 @@
 package fabricator.properties
 
+import fabricator.Fabricator;
 import fabricator.Property
 import fabricator.Sequence
+import groovy.transform.ToString;
 
 /**
  * sequence property 
  * 
  * @author peter
  */
+@ToString(includeSuper=true, includeNames=true)
 class SequenceProperty extends Property {
 
-	final Sequence sequence
+	final String sequence
 
-	public SequenceProperty(String name, boolean ignore, Sequence sequence) {
+	public SequenceProperty(String name, boolean ignore, String sequence) {
 		super(name, ignore)
 
 		this.sequence = sequence
@@ -20,8 +23,6 @@ class SequenceProperty extends Property {
 
 	@Override
 	public Closure toClosure() {
-		def tmp = this.sequence
-		
-		return { println "jup"; tmp++ }
+		return { sequenceName, args -> Fabricator.generate(sequenceName) }.curry(this.sequence)
 	}
 }
