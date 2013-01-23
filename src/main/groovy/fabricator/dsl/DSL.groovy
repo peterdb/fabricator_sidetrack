@@ -19,7 +19,7 @@ class DSL {
 
 			name = name.simpleName.toLowerCase()
 		}
-
+		
 		if(options["parent"] instanceof String) {
 			options["parent"] = Fabricator.factoryByName(options["parent"])
 		}

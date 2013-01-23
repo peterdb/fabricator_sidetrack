@@ -21,7 +21,7 @@ class Factory {
 		this.parent = options["parent"]
 		this.classToCreate = options["class"]
 		
-		definition = new Definition(name)
+		definition = new Definition(name, options["traits"])
 	}
 	
 	public Class getClassToCreate() {
@@ -50,6 +50,9 @@ class Factory {
 		
 		def allProperties = getPropertiesToApply(overrides)
 		
+		println "running factory $name with properties $allProperties"
+		println definition.declaredTraits
+		
 		allProperties.each { name, property ->
 			Closure closure = property.toClosure()
 
@@ -74,6 +77,8 @@ class Factory {
 		collector.values.each { name, value ->
 			// skip if ignored
 			if(!allProperties[name].ignore) {
+				// TODO ignore primitive values when value == null
+				println "setting property $name to $value"
 				target[name] = value
 			}
 		}
@@ -88,15 +93,13 @@ class Factory {
 		// first collect all properties (mine + parent)
 		collectProperties(props)
 
-		if(overrides == null) {
-			overrides = [:]
-		}
+		if(overrides) {
+			props.putAll(overrides.collectEntries{ name, override ->
+				def ignore = props[name] ? props[name].ignore : false
 				
-		props.putAll(overrides.collectEntries{ name, override ->
-			def ignore = props[name] ? props[name].ignore : false
-			
-			[name, override instanceof Closure ? new Dynamic(name, ignore, override) : new Static(name, ignore, override)]
-		})
+				[name, override instanceof Closure ? new Dynamic(name, ignore, override) : new Static(name, ignore, override)]
+			})
+		}
 		
 		return props
 	}
@@ -106,7 +109,7 @@ class Factory {
 			parent.collectProperties(collected)
 		}
 		
-		collected.putAll(declarations.toProperties().collectEntries { property -> [(property.name): property]})
+		collected.putAll(definition.properties.collectEntries { property -> [(property.name): property]})
 	}
 	
 	def instantiator(Closure instantiator) {

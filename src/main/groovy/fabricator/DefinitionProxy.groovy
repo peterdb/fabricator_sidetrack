@@ -129,6 +129,10 @@ class DefinitionProxy {
 		new DefinitionProxy(definition, true).with(closure)
 	}
 	
+	def factory(Map options = [:], String name) {
+		factory(options, name, null)
+	}
+	
 	def factory(Map options = [:], String name, Closure closure) {
 		childFactories << [name, options, closure]
 	}

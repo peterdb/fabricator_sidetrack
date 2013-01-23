@@ -9,4 +9,10 @@ class Trait {
 
 	final String name
 	
+	public Trait(String name) {
+		this.name = name
+		
+		definition = new Definition(name)
+	}
+	
 }

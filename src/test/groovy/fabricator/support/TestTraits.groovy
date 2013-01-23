@@ -1,26 +1,22 @@
-package fabricator.stories
+package fabricator.support
 
 import fabricator.Fabricator
-import fabricator.dsl.DSL
-import fabricator.support.Story
-import fabricator.support.User
 
-description "traits"
+class TestTraits {
 
-scenario "traits", {
-	given "a factory is defined with aliases", {
+	public static void main(String[] args) {
 		Fabricator.define {
-			factory(User, aliases: ["author"])
+			factory User, aliases: ["author"]
 			
-			factory(Story) {
+			factory Story, {
 				title "My awesome story"
 				author
 
-				trait "published" {
+				trait "published", {
 					published true
 				}
 
-				trait "unpublished" {
+				trait "unpublished", {
 					published false
 				}
 			
@@ -39,17 +35,12 @@ scenario "traits", {
 //			  factory :week_long_unpublished_story,  traits: [:unpublished, :week_long_publishing]
 //			  factory :month_long_unpublished_story, traits: [:unpublished, :month_long_publishing]
   
-				factory "published", traits: [published]
+				factory("published", traits: ["published"])
 			}
 		}
+		
+		//println Fabricator.fabricate("story")
+		println Fabricator.fabricate("published")
 	}
 	
-	when "blah", {
-		story = Fabricator.fabricate(Story)
-	}
-	
-	then "a lookup with the alias should return the factory", {
-		println story
-	}
 }
-

@@ -1,10 +1,9 @@
 package fabricator.configuration
 
-import fabricator.DefinitionProxy
+import fabricator.Definition
 import fabricator.Factory
 import fabricator.Sequence
 import fabricator.support.DefaultNamingStrategy
-import fabricator.support.NamedRegistry
 import fabricator.support.NamingStrategy
 
 class Configuration {
@@ -14,6 +13,9 @@ class Configuration {
 	Closure instantiator = { classToCreate -> classToCreate.newInstance() }
 	NamingStrategy naming = new DefaultNamingStrategy()
 	final afterCreateCallbacks = []
+	
+	@Delegate
+	final Definition definition = new Definition()
 
 	public void defaultInstantiator(Closure closure) {
 		instantiator = closure

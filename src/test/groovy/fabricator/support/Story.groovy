@@ -6,7 +6,7 @@ import groovy.transform.ToString;
 class Story {
 	String title
 	User author
-	boolean published
+	Boolean published
 	Date startAt
 	Date endAt
 }
