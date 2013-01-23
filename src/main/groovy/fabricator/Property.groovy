@@ -1,6 +1,5 @@
 package fabricator
 
-import fabricator.support.Named;
 import groovy.transform.ToString;
 
 @ToString(includeNames=true)

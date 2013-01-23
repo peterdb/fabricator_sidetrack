@@ -1,0 +1,3 @@
+moduleName=fabricator-module
+moduleVersion=0.0.1-SNAPSHOT
+extensionClasses=fabricator.groovy.FabricatorClassExtension

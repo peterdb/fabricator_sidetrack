@@ -1,26 +1,22 @@
 package fabricator.configuration
 
 import fabricator.Definition
-import fabricator.Factory
+import fabricator.Blueprint
 import fabricator.Sequence
-import fabricator.support.DefaultNamingStrategy
-import fabricator.support.NamingStrategy
 
 class Configuration {
-	final Map<String, Sequence> sequences = [:]
-	final Map<String, Factory> factories = [:]
-
-	Closure instantiator = { classToCreate -> classToCreate.newInstance() }
-	NamingStrategy naming = new DefaultNamingStrategy()
-	final afterCreateCallbacks = []
+	Map<String, Sequence> sequences = [:]
+	Map<String, Blueprint> blueprints = [:]
 	
 	@Delegate
 	final Definition definition = new Definition()
 
-	public void defaultInstantiator(Closure closure) {
-		instantiator = closure
-	}
+	String blueprintsPath = "src/test/blueprints"
 	
+	public Configuration() {
+		definition.constructor = { Class klass -> klass.newInstance() }
+	}
+		
 	public void registerSequence(Sequence sequence) {
 		assert sequence, "sequence cannot be null"
 
@@ -36,26 +32,15 @@ class Configuration {
 		return sequences[name]
 	}
 
-	public void registerFactory(Factory factory) {
-		assert factory, "factory cannot be null"
+	public void registerBlueprint(Blueprint blueprint) {
+		assert blueprint, "blueprint cannot be null"
 
-		factories.put(factory.name, factory)
-		factory.aliases.each { alias ->
-			factories.put(alias, factory)
+		blueprint.names.each { name ->
+			blueprints[name] = blueprint
 		}
 	}
 
-	public Factory factoryByName(String name) {
-		return factories[name]
-	}
-
-	public Factory factoryByClass(Class klass) {
-		def name = naming.nameFor(klass)
-
-		return factoryByName(name)
-	}
-
-	public void afterCreate(Closure closure) {
-		afterCreateCallbacks << closure
+	public Blueprint blueprintByName(String name) {
+		return blueprints[name]
 	}
 }

@@ -4,25 +4,23 @@ import fabricator.Fabricator;
 import fabricator.Sequence
 import fabricator.support.User
 
-description "transient properties"
+description "Transient (or ignored) properties can be used, but will be ignored when populating the object"
 
-before "define a factory with a transient property", {
-	Fabricator.define {
-		factory(User) {
-			ignore {
-				emailHost "example.com"
-			}
-			
-			first "John"
-			last "Doe"
-			email { "$first.$last@$emailHost" }
+before "define a blueprint with a transient property", {
+	User.blueprint {
+		ignore {
+			emailHost "example.com"
 		}
+		
+		first "John"
+		last "Doe"
+		email { "$first.$last@$emailHost" }
 	}
 }
 
 scenario "transient property, used in another dynamic property", {
-	when "an object is created", {
-		user = Fabricator.fabricate("user")
+	when "an object is built", {
+		user = User.build()
 	}
 
 	then "the transient property must be used in the dynamic property", {
@@ -34,9 +32,9 @@ scenario "transient property, used in another dynamic property", {
 	}
 }
 
-scenario "transient property, used in another dynamic property; transient property is overridden in fabricate method", {
+scenario "transient property, used in another dynamic property; transient property is overridden in build method", {
 	when "an object is created", {
-		user = Fabricator.fabricate("user", emailHost: "gmail.com")
+		user = User.build(emailHost: "gmail.com")
 	}
 
 	then "the transient property must be used in the dynamic property", {

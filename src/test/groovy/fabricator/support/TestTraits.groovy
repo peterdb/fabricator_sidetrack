@@ -39,8 +39,8 @@ class TestTraits {
 			}
 		}
 		
-		//println Fabricator.fabricate("story")
-		println Fabricator.fabricate("published")
+		//println Fabricator.build("story")
+		println Fabricator.build("published")
 	}
 	
 }

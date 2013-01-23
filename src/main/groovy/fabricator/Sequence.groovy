@@ -1,7 +1,5 @@
 package fabricator
 
-import fabricator.support.Named;
-
 public class Sequence {
 
 	final String name
@@ -12,9 +10,13 @@ public class Sequence {
 	
 	public Sequence(String name, Map options = [:], Closure closure = null) {
 		this.name = name
-		this.aliases = options["aliases"]
-		current = options["start"]	
+		this.aliases = options["aliases"] ?: []
+		current = options["start"] ?: 1
 		this.closure = closure
+	}
+	
+	public List names() {
+		return [name] + aliases
 	}
 	
 	public Object next() {

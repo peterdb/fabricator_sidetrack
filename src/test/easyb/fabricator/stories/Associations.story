@@ -4,25 +4,23 @@ import fabricator.Fabricator;
 import fabricator.support.Kitten;
 import fabricator.support.User
 
-description "associations"
+description "association properties"
 
-scenario "a simple association", {
+scenario "an implicit assocation", {
 	given "an association with no params", {
-		Fabricator.define {
-			factory(Kitten) {
-				name "Garfield"
-			}
+		Kitten.blueprint {
+			name "Garfield"
+		}
 			
-			factory(User) {
-				first "John"
-				last "Doe"
-				kitten
-			}
+		User.blueprint {
+			first "John"
+			last "Doe"
+			kitten
 		}
 	}
 	
-	when "a user is fabricated", {
-		user = Fabricator.fabricate(User)
+	when "a user is built", {
+		user = User.build()
 	}
 	
 	then "it should have a kitten", {
@@ -31,26 +29,52 @@ scenario "a simple association", {
 	}
 }
 
-scenario "an association with overridden property", {
-	given "a user factory with a kitten association", {
-		Fabricator.define {
-			factory(Kitten) {
+scenario "an association with a custom blueprint", {
+	given "an association with a custom blueprint", {
+		Kitten.blueprint {
+			name "generic kitten"
+			
+			blueprint("garfield") {
 				name "Garfield"
 			}
-			factory(User) {
-				first "John"
-				last "Doe"
-				kitten name:"overridden name"
-			}
+		}
+		
+		User.blueprint {
+			first "John"
+			last "Doe"
+			kitten blueprint: "garfield" 
 		}
 	}
 	
-	when "a user is fabricated", {
-		user = Fabricator.fabricate(User)
+	when "a user is built", {
+		user = User.build()
+	}
+	
+	then "it should have garfield as a kitten", {
+		user.kitten.shouldNotBe null
+		user.kitten.name.shouldBe "Garfield"
+	}
+}
+
+scenario "an association with overridden property", {
+	given "an association with an override", {
+		Kitten.blueprint {
+			name "generic kitten"
+		}
+		
+		User.blueprint {
+			first "John"
+			last "Doe"
+			kitten name:"Garfield"
+		}
+	}
+	
+	when "a user is built", {
+		user = User.build()
 	}
 	
 	then "it should have a kitten with an overridden name", {
 		user.kitten.shouldNotBe null
-		user.kitten.name.shouldBe "overridden name"
+		user.kitten.name.shouldBe "Garfield"
 	}
 }

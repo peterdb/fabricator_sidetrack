@@ -1,7 +1,7 @@
 package fabricator.declaration
 
 import fabricator.Fabricator
-import fabricator.Factory;
+import fabricator.Blueprint;
 import fabricator.Property
 import fabricator.properties.Association
 import fabricator.properties.SequenceProperty
@@ -12,9 +12,9 @@ import fabricator.properties.Static
  */
 class ImplicitDeclaration extends Declaration {
 
-	final Factory factory
+	final Blueprint factory
 	
-	public ImplicitDeclaration(String name, Factory factory = null, boolean ignore) {
+	public ImplicitDeclaration(String name, Blueprint factory = null, boolean ignore) {
 		super(name, ignore)
 		
 		this.factory = factory
@@ -22,13 +22,12 @@ class ImplicitDeclaration extends Declaration {
 
 	@Override
 	public Property toProperty() {
-		if(Fabricator.configuration.factories.containsKey(name)) {
+		if(Fabricator.configuration.blueprints.containsKey(name)) {
 			return new Association(name, name)
 		} else if(Fabricator.configuration.sequences.containsKey(name)) {
 			return new SequenceProperty(name, ignore, name)
 		} else {
-			factory.inheritTraits([name])
-			return null
+			throw new IllegalArgumentException("unsupported")
 		}
 	}
 }

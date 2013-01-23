@@ -9,7 +9,7 @@ class DefinitionProxy {
 
 	@Delegate
 	final Definition definition
-	final List childFactories = []
+	final List childBlueprints = []
 	final boolean ignore
 
 	public DefinitionProxy(Definition definition, boolean ignore = false) {
@@ -61,8 +61,8 @@ class DefinitionProxy {
 	def methodMissing(String name, args) {
 		if(args.size() == 0) {
 			definition.declareProperty(new ImplicitDeclaration(name, ignore))
-		} else if(args[0] instanceof Map && args[0].containsKey("factory") ) {
-			association(name, args)
+		} else if(args[0] instanceof Map && args[0].containsKey("blueprint") ) {
+			association(name, args[0])
 		} else {
 			addProperty(name, args[0])
 		}
@@ -129,23 +129,15 @@ class DefinitionProxy {
 		new DefinitionProxy(definition, true).with(closure)
 	}
 	
-	def factory(Map options = [:], String name) {
-		factory(options, name, null)
+	def blueprint(Map options = [:], String name) {
+		blueprint(options, name, null)
 	}
 	
-	def factory(Map options = [:], String name, Closure closure) {
-		childFactories << [name, options, closure]
+	def blueprint(Map options = [:], String name, Closure closure) {
+		childBlueprints << [name, options, closure]
 	}
 	
-	def trait(String name, Closure closure) {
-		Trait trait = new Trait(name)
-		
-		new DefinitionProxy(trait.definition).with(closure)
-		
-		definition.defineTrait(trait)
-	}
-	
-	def instantiator(Closure closure) {
-		instantiator = closure
+	def constructor(Closure constructor) {
+		this.constructor = constructor
 	}
 }

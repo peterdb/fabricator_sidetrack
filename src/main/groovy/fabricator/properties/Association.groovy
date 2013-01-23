@@ -2,7 +2,7 @@ package fabricator.properties
 
 import fabricator.Fabricator;
 import fabricator.Property
-import fabricator.Factory
+import fabricator.Blueprint
 
 /**
  * association property 
@@ -11,18 +11,18 @@ import fabricator.Factory
  */
 class Association extends Property {
 
-	final String factory
+	final String blueprint
 	final Map overrides
 
-	public Association(String name, String factory, Map overrides = [:]) {
+	public Association(String name, String blueprint, Map overrides = [:]) {
 		super(name, false)
 
-		this.factory = factory
+		this.blueprint = blueprint
 		this.overrides = overrides
 	}
 	
 	@Override
 	public Closure toClosure() {
-		return { Fabricator.fabricate(overrides, factory) }
+		return { Fabricator.build(overrides, blueprint) }
 	}
 }

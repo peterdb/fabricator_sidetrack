@@ -8,21 +8,22 @@ import fabricator.properties.Association
  */
 class AssociationDeclaration extends Declaration {
 
-	final List options
 	final Map overrides
+	final String blueprint
 	
-	public AssociationDeclaration(String name, options) {
+	public AssociationDeclaration(String name, Map options) {
 		super(name, false)
+
+		def overrides = options.clone()
 		
-		this.options = options.clone()
-		this.overrides = options.find { it instanceof Map }
+		this.blueprint = overrides["blueprint"] ?: name 
+		overrides.remove("blueprint")
+		
+		this.overrides = overrides
 	}
 
 	@Override
 	public Property toProperty() {
-		String factoryName = overrides["factory"] || name 
-		overrides.remove("factory")
-		
-		return new Association(name, factoryName, [options, overrides].flatten())
+		return new Association(this.name, blueprint, overrides)
 	}
 }

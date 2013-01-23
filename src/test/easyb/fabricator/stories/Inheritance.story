@@ -3,26 +3,39 @@ package fabricator.stories
 import fabricator.Fabricator;
 import fabricator.support.User
 
-scenario "define a factory", {
-	given "a factory is defined", {
-		Fabricator.define {
-			factory(User) {
-				first "John"
-				last "Doe"
-				email { "$first.$last@example.com" }
-				
-				factory("admin") {
-					admin true
-				}
-			}
+description ""
+
+scenario "definition of a blueprint inside another blueprint", {
+	given "an empty configuration", {
+		Fabricator.reset()
+	}
+	
+	when "a blueprint is defined inside another blueprint", {
+		user = User.blueprint {
+			blueprint("admin")
 		}
+		
+		admin = Fabricator.blueprintByName("admin")
 	}
 
-	then "it registers a factory with the name", {
-		Fabricator.configuration.with {
-			factoryByName("user").shouldNotBe null
-			factoryByName("admin").shouldNotBe null
-			factoryByName("admin").parent.shouldBe factoryByName("user")
-		}
+	then "two blueprints are created, the outer blueprint is the parent of the inner blueprint", {
+		user.parent.shouldBe null
+		admin.parent.shouldBe user
+	}
+}
+
+scenario "definition of a blueprint with explicit parent", {
+	given "an empty configuration", {
+		Fabricator.reset()
+	}
+	
+	when "a blueprint is defined with an explicit parent", {
+		user = User.blueprint()
+		admin = User.blueprint("admin", parent: "user")
+	}
+
+	then "two blueprints are created, the user blueprint is set as parent", {
+		user.parent.shouldBe null
+		admin.parent.shouldBe user
 	}
 }

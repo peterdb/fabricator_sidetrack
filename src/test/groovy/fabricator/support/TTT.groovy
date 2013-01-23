@@ -2,43 +2,18 @@ package fabricator.support
 
 import fabricator.Fabricator
 
-class TTT {
-
-	public static void main(String[] args) {
-		Fabricator.define {
-			sequence("ttt")
-			sequence("first") { n -> "person$n" }
-			sequence("first2", start: 10) { n -> "person$n" }
-			
-			factory(Kitten) {
-				name "Garfield"
-			}
-			
-			factory(User) {
-				ignore {
-					host "example.com"
-				}
-				
-				first
-				last "dynamic"
-				email { "$first.$last@$host" }
-				kitten
-				
-				factory("admin") {
-					admin true
-				}
-				
-				factory("admin2", parent: "admin") {
-					first "jup"
-					admin true
-				}
-			}
-		}
-		
-		println Fabricator.fabricate(User)
-		println Fabricator.fabricate(User, admin: true)
-		println Fabricator.fabricate("admin")
-		println Fabricator.fabricate("admin2")
-	}
+Kitten.blueprint {
+	name "generic kitten"
 	
+	blueprint("garfield") {
+		name "Garfield"
+	}
 }
+
+User.blueprint {
+	first "John"
+	last "Doe"
+	kitten(blueprint: "garfield") 
+}
+
+println User.build()
