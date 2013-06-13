@@ -1,6 +1,7 @@
 package fabricator.support
 
 import fabricator.Fabricator
+import fabricator.experimental.FabricatorGroovyMethods;
 
 class TTT {
 
@@ -39,6 +40,10 @@ class TTT {
 		println Fabricator.fabricate(User, admin: true)
 		println Fabricator.fabricate("admin")
 		println Fabricator.fabricate("admin2")
+		
+		use(FabricatorGroovyMethods) {
+			println User.fabricate()
+		}
 	}
 	
 }

@@ -1,22 +1,21 @@
 package fabricator.declaration
 
 import fabricator.Fabricator
-import fabricator.Factory;
+import fabricator.Factory
 import fabricator.Property
 import fabricator.properties.Association
 import fabricator.properties.SequenceProperty
-import fabricator.properties.Static
 
 /**
- * Static property definition
+ * Implicit property declaration
  */
 class ImplicitDeclaration extends Declaration {
 
 	final Factory factory
-	
+
 	public ImplicitDeclaration(String name, Factory factory = null, boolean ignore) {
 		super(name, ignore)
-		
+
 		this.factory = factory
 	}
 

@@ -21,7 +21,7 @@ class Factory {
 		this.parent = options["parent"]
 		this.classToCreate = options["class"]
 		
-		definition = new Definition(name, options["traits"])
+		definition = new Definition(name)
 	}
 	
 	public Class getClassToCreate() {
@@ -51,26 +51,23 @@ class Factory {
 		def allProperties = getPropertiesToApply(overrides)
 		
 		println "running factory $name with properties $allProperties"
-		println definition.declaredTraits
 		
 		allProperties.each { name, property ->
 			Closure closure = property.toClosure()
 
 			// set the delegate to result so dynamic properties can reference properties that already have been set
-			def value = collector.with(closure)
-			
-			collector[name] = value
+			collector[name] = collector.with(property.toClosure())
 		}
 
 		// create new instance if necessary
 		if(target == null) {
-			def closure = instantiator ? instantiator : Fabricator.configuration.instantiator
+			def creator = this.instantiator ? this.instantiator : Fabricator.configuration.instantiator
 			
 			// use the collector as a delegate, so property values are resolved in the instantiator closure
-			closure.delegate = collector
-			closure.resolveStrategy = Closure.DELEGATE_FIRST
+			creator.delegate = collector
+			creator.resolveStrategy = Closure.DELEGATE_FIRST
 			
-			target = closure.call(getClassToCreate())			
+			target = creator.call(getClassToCreate())			
 		}
 		
 		// apply all non-transient property values in the collector to the target object
@@ -110,12 +107,6 @@ class Factory {
 		}
 		
 		collected.putAll(definition.properties.collectEntries { property -> [(property.name): property]})
-	}
-	
-	def instantiator(Closure instantiator) {
-		assert instantiator != null
-		
-		this.instantiator = instantiator
 	}
 	
 	def factory(Object[] args) {

@@ -2,7 +2,13 @@ package fabricator.declaration
 
 import fabricator.Property
 
-abstract class Declaration {
+
+/**
+ * Property declaration, also acts as a factory for {@link Property} instances.
+ * 
+ * @author peter
+ */
+abstract class Declaration<T extends Property> {
 
 	final name
 	final boolean ignore
@@ -12,6 +18,6 @@ abstract class Declaration {
 		this.ignore = ignore
 	}
 	
-	abstract Property toProperty();
+	abstract T toProperty();
 	
 }

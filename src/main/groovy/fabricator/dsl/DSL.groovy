@@ -1,25 +1,28 @@
 package fabricator.dsl
 
-import fabricator.DefinitionProxy
 import fabricator.Fabricator
 import fabricator.Factory
 import fabricator.Sequence
 import fabricator.Trait
 
 class DSL {
-	public static void factory(Map options = [:], name) {
+	public static void factory(Map options = [:], Class type) {
+		factory(options, type, null)
+	}
+	
+	public static void factory(Map options = [:], String name) {
 		factory(options, name, null)
 	}
 	
-	public static void factory(Map options = [:], name, Closure closure) {
-		if(name instanceof Class) {
-			if(!options["class"]) {
-				options["class"] = name
-			}
-
-			name = name.simpleName.toLowerCase()
+	public static void factory(Map options = [:], Class type, Closure closure) {
+		if(!options["class"]) {
+			options["class"] = type
 		}
-		
+
+		factory(options, type.simpleName.toLowerCase(), closure)
+	}
+	
+	public static void factory(Map options = [:], String name, Closure closure) {
 		if(options["parent"] instanceof String) {
 			options["parent"] = Fabricator.factoryByName(options["parent"])
 		}
@@ -49,16 +52,17 @@ class DSL {
 		Fabricator.registerSequence(new Sequence(name, options, closure))
 	}
 	
-	public static void trait(String name, Closure closure) {
-		Trait trait = new Trait(name)
-		
-		DefinitionProxy proxy = new DefinitionProxy(trait.definition)
-		proxy.with(closure)
-
-		Fabricator.registerTrait(trait)
-	}
+//	public static void trait(String name, Closure closure) {
+//		Trait trait = new Trait(name)
+//		
+//		DefinitionProxy proxy = new DefinitionProxy(trait.definition)
+//		proxy.with(closure)
+//
+//		Fabricator.registerTrait(trait)
+//	}
 	
 	public static void instantiator(Closure instantiator) {
+		println "jup"
 		Fabricator.configuration.instantiator = instantiator
 	}
 }

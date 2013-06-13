@@ -64,8 +64,4 @@ public class Fabricator {
 	public static void registerSequence(Sequence sequence) {
 		configuration.registerSequence(sequence)
 	}
-	
-	public static void registerTrait(Trait trait) {
-		configuration.registerTrait(trait)
-	}
 }

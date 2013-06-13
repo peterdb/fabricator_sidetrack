@@ -11,7 +11,7 @@ class FabricatorGroovyMethods {
 
 	// TODO investigate groovy 2 extension modules: http://docs.codehaus.org/display/GROOVY/Creating+an+extension+module
 	
-	public static Object fabricate(Class klass, Object[] args) {
+	public static <T> T fabricate(Class<T> klass, Object[] args) {
 		def overrides = args.find { it instanceof Map }
 		def factory = args.find { it instanceof String }
 

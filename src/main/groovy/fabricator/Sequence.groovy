@@ -1,23 +1,24 @@
 package fabricator
 
 import fabricator.support.Named;
+import groovy.transform.ToString;
 
+@Mixin(Named)
 public class Sequence {
 
-	final String name
-	final List aliases
-	final Closure closure
+	final Closure generator
 	
 	Object current
 	
-	public Sequence(String name, Map options = [:], Closure closure = null) {
+	public Sequence(String name, Map options = [:], Closure generator = null) {
 		this.name = name
 		this.aliases = options["aliases"]
-		current = options["start"]	
-		this.closure = closure
+		this.generator = generator
+		
+		current = options["start"] ?: 0
 	}
 	
 	public Object next() {
-		return closure ? closure(current++) : current++
+		return generator ? generator(current++) : current++
 	}
 }

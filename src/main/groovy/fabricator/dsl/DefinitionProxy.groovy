@@ -1,5 +1,7 @@
-package fabricator
+package fabricator.dsl
 
+import fabricator.Definition;
+import fabricator.Trait;
 import fabricator.declaration.AssociationDeclaration
 import fabricator.declaration.DynamicDeclaration
 import fabricator.declaration.ImplicitDeclaration

@@ -4,15 +4,15 @@ import fabricator.Property
 import fabricator.properties.Dynamic
 
 /**
- * Static property definition
+ * Dynamic property definition
  */
 class DynamicDeclaration extends Declaration {
 
 	final Closure closure
-	
+
 	public DynamicDeclaration(String name, boolean ignore, Closure closure) {
 		super(name, ignore)
-		
+
 		this.closure = closure
 	}
 
